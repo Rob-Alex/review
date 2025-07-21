@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="http://localhost:4001/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4001/" rel="alternate" type="text/html" /><updated>2025-07-21T11:58:30+01:00</updated><id>http://localhost:4001/feed.xml</id><title type="html">Robbie’s Blog - Review Site</title><subtitle>Review and staging environment for blog posts and features.</subtitle><entry><title type="html">Building A Compute Library</title><link href="http://localhost:4001/2025/06/01/building-a-compute-library.html" rel="alternate" type="text/html" title="Building A Compute Library" /><published>2025-06-01T00:00:00+01:00</published><updated>2025-06-01T00:00:00+01:00</updated><id>http://localhost:4001/2025/06/01/building-a-compute-library</id><content type="html" xml:base="http://localhost:4001/2025/06/01/building-a-compute-library.html"><![CDATA[# Introduction
+
+This project started during my PhD as I stumbled across the wonderful world of [scientific computing](https://en.wikipedia.org/wiki/Computational_science), where complex physics/maths problems are solved through numerical methods. There are many many aspects to this realm that focus on algorithms and hardware. In this first blog I am focusing on the backend development of my own compute library `tensor-cpp` that I will hopefully be able to use during my PhD to develop a [Finite volume method (FVM)](https://en.wikipedia.org/wiki/Finite_volume_method) or [Finite element method (FEM)](https://en.wikipedia.org/wiki/Finite_element_method) library to model the development of plasma channels for various pulsed power applications.
+
+There are a tonne of great libraries that are already used such as Eigen <a href="#citeproc_bib_item_1">[1]</a>, a fantastic linear algebra library that allows expression-template-based <a href="#citeproc_bib_item_2">[2]</a> work relating to matrices, vectors, etc.
+
+Again one of the interesting ideas I thought would be good to learn was how to properly work with GPUs for scientific computing as the original extent of my knowledge was f32 = bad, and f64 = good. So supporting heterogenous backends with GPU acceleration became one of the ever growing goals to this `tensor-cpp`
+
+
+# Designing the Library
+
+I think the quote &ldquo;First, solve the problem. Then, <del>write the code</del> implement the solution.&rdquo; by John Johnson is a good philosphy to live by when developing any new engineering solutions be that in software or hardware worlds. Therefore the first steps were to properly define the scope of our project so we dont inccur [tech debt](https://en.wikipedia.org/wiki/Technical_debt) or have massive [scope creep](https://en.wikipedia.org/wiki/Scope_creep) along the development lifecycle.
+
+My main wants really stemmed from wanting to learn about scientific computing and HPC in more depth purely for understanding how more complex numerical methods are implemented in simulation software however I managed to define some motivations for the library that stemmed from practical needs of my own if I wanted to continue taking this further, these were:
+
+-   **Backend-Agnostic Architecture** - The library should be flexibile enough to target different hardware - be that CPU or GPU - without rewriting algorithms for each backend as that would be terribly tedious.
+
+-   **Zero-Cost Abstractions** - Honestly this wasn&rsquo;t a goal at first but after reading about libraries like Eigen, the idead of having abstractions without additonal performance cost sounded great to learn about.
+
+-   **Extensible** - The architecture should clearly seperate the concerns of backend operations and computation logic to make it easier to develop the library further as well as for others to pick it up if they so desire.
+
+-   **Performance Driven** - High performance is required for large scale simulations and to ensure that these don&rsquo;t go crazy throughout the lifetime of each simulation it is imperative that we can observe the API&rsquo;s ability with benchmarking and performance analysis.
+
+
+# Developing an Agnostic Backend
+
+I am currently doing all my laptop work on the apple silicon M2 chip which has served me well, therefore the first backend I wanted to be able to support was the Metal API apple provides, to be able to take advantage of the GPU stack.
+
+As a jumping off point, there is a good article that walks through the basic process of using Metal from C++ by [Lars Gebraad](https://larsgeb.github.io/2022/04/20/m1-gpu.html). This highlights the necessary processes involved in compiling the metal shaders and linking against the necessary frameworks.
+
+Example of using a citation <a href="#citeproc_bib_item_3">[3]</a>. \\( \\frac{x^2}{x^3} \\) is an example equation.
+<a href="#citeproc_bib_item_4">[4]</a>
+
+    int main()
+    {
+    std::cout << "Hello World"
+    
+    }
+
+
+# Implementing the Compute Layer
+
+Implementation
+
+
+## Expression Templates and Lazy Evaluation
+
+lets talk about expression templates
+
+
+## Sending Dispatch Commands
+
+lets talk about the dispatch commands
+
+
+# Managing Memory and Resources
+
+
+## RAII for Memory Safety and Lifetime Management
+
+
+## Unified Buffer Abstraction for CPU and GPU
+
+
+## Memory Synchronisation
+
+
+# Performance and Testing
+
+
+## Building a Performance Measurement Framework
+
+
+## Stastical Analysis and Benchmarking
+
+
+# Future Work
+
+
+# References
+
+<style>.csl-left-margin{float: left; padding-right: 0em;}
+ .csl-right-inline{margin: 0 0 0 1em;}</style><div class="csl-bib-body">
+  <div class="csl-entry"><a id="citeproc_bib_item_1"></a>
+    <div class="csl-left-margin">[1]</div><div class="csl-right-inline">G. Guennebaud, B. Jacob, and others, “Eigen v3,” 2010, <i>http://eigen.tuxfamily.org</i>.</div>
+  </div>
+  <div class="csl-entry"><a id="citeproc_bib_item_2"></a>
+    <div class="csl-left-margin">[2]</div><div class="csl-right-inline">T. Veldhuizen, “Expression templates,” 1995, <i>https://www.cs.rpi.edu/ musser/design/blitz/exprtmpl.html</i>.</div>
+  </div>
+  <div class="csl-entry"><a id="citeproc_bib_item_3"></a>
+    <div class="csl-left-margin">[3]</div><div class="csl-right-inline">D. A. S. Rees, “An introduction to compact finite differences.” [Online]. Available: <a href="https://people.bath.ac.uk/ensdasr/COMPACT/dasr.compact.pdf">https://people.bath.ac.uk/ensdasr/COMPACT/dasr.compact.pdf</a></div>
+  </div>
+  <div class="csl-entry"><a id="citeproc_bib_item_4"></a>
+    <div class="csl-left-margin">[4]</div><div class="csl-right-inline">L. Gebraad, “M1 gpus for c++ science: Saxpy and finite differences.” [Online]. Available: <a href="https://larsgeb.github.io/2022/04/22/m1-gpu.html">https://larsgeb.github.io/2022/04/22/m1-gpu.html</a></div>
+  </div>
+</div>]]></content><author><name></name></author><summary type="html"><![CDATA[]]></summary></entry></feed>

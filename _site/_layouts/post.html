@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+
+  <!-- Load KaTeX (Latest Version) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha512-ZqiWzpHm6oG3MiQg5P8tGgNNTNtrMTzgfqlZXCPWZ6f7QVjm4n7xF0WGI3WgJLnxXh+HjRwu8d6Y3EAgv+WZBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" integrity="sha512-LqAYXyJAmwp8k1jdxNF3rD1Hl7l3YdL+TNkxbgOFON5hYgGcx5Kj2JckKTcSKF3yN6HhSPWzfnvfwLcf9n5XCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <!-- KaTeX Auto-render for automatic math rendering -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" integrity="sha512-iWiuBS5nt6r60fCz26Nd0Zqe0nbk1ZTIQbl3Kv7kYsX+yKMUFHzjaH2+AnM6vp2Xs+gNmaBAVWJjSmuPw76Efg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <!-- Highlight.js for modern syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="highlight-light">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="highlight-dark" disabled>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <!-- Additional language support -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/lisp.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/lua.min.js"></script>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Preload Inter for body text and JetBrains Mono for code -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Robbie’s Blog - Review Site | Review and staging environment for blog posts and features.</title>
+<meta name="generator" content="Jekyll v3.9.5" />
+<meta property="og:title" content="Robbie’s Blog - Review Site" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Review and staging environment for blog posts and features." />
+<meta property="og:description" content="Review and staging environment for blog posts and features." />
+<link rel="canonical" href="http://localhost:4001/_layouts/post.html" />
+<meta property="og:url" content="http://localhost:4001/_layouts/post.html" />
+<meta property="og:site_name" content="Robbie’s Blog - Review Site" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Robbie’s Blog - Review Site" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"Review and staging environment for blog posts and features.","headline":"Robbie’s Blog - Review Site","url":"http://localhost:4001/_layouts/post.html"}</script>
+<!-- End Jekyll SEO tag -->
+<!-- Load Minima Styles -->
+  <link rel="stylesheet" href="/assets/main.css">
+
+  <!-- Load Custom Styles (Overrides Minima) -->
+  <link rel="stylesheet" href="/assets/css/custom.css">
+  
+  <!-- Review Site Password Protection -->
+  <script src="/assets/js/review-protection.js"></script>
+  
+  <!-- Prevent theme flicker by setting theme immediately -->
+  <script>
+    (function() {
+      function getStoredTheme() {
+        return localStorage.getItem('theme');
+      }
+      
+      function getSystemTheme() {
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      
+      function getCurrentTheme() {
+        return getStoredTheme() || getSystemTheme();
+      }
+      
+      // Apply theme immediately to prevent flicker
+      document.documentElement.setAttribute('data-theme', getCurrentTheme());
+    })();
+  </script><link type="application/atom+xml" rel="alternate" href="http://localhost:4001/feed.xml" title="Robbie's Blog - Review Site" /></head>
+<body><header class="site-header" role="banner">
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Robbie&#39;s Blog - Review Site</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a><input type="text" id="search-input" placeholder="Search posts..." class="search-input" style="display: none;">
+          <button class="search-toggle" id="search-toggle" aria-label="Toggle search">
+            <span class="search-icon">Search</span>
+          </button>
+          <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+            <span class="theme-icon">Dark</span>
+          </button>
+        </div>
+      </nav><link rel="stylesheet" href="/assets/css/custom.css">
+  </div>
+</header>
+
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline"></h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="" itemprop="datePublished">
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title"></h1>
+  </header>
+
+  <div class="post-content">
+    <div class="home"><!-- This is the actual home page after password authentication --><h2 class="post-list-heading">Posts</h2>
+    <ul class="post-list"><li><span class="post-meta">Jun 1, 2025</span>
+        <h3>
+          <a class="post-link" href="/2025/06/01/building-a-compute-library.html">
+            Building A Compute Library
+          </a>
+        </h3></li></ul>
+
+    <p class="rss-subscribe">subscribe <a href="/feed.xml">via RSS</a></p></div>
+
+  </div>
+
+</article>
+
+  </div><a class="u-url" href="/_layouts/post.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Robbie&#39;s Blog - Review Site</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Robbie&#39;s Blog - Review Site</li><li><a class="u-email" href="mailto:rob.alexander.115@gmail.com">rob.alexander.115@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/Rob-Alex"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">Rob-Alex</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Review and staging environment for blog posts and features.</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+<!-- KaTeX Auto-render Initialization with Equation Numbering -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  // Pre-process equation references before KaTeX renders
+  processEquationReferences();
+  
+  // Render math with KaTeX
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$', right: '$', display: false},
+      {left: '\\(', right: '\\)', display: false},
+      {left: '\\[', right: '\\]', display: true}
+    ],
+    throwOnError: false
+  });
+  
+  // Add equation numbers after KaTeX renders
+  setTimeout(function() {
+    numberEquations();
+    linkEquationReferences();
+  }, 100);
+});
+
+function processEquationReferences() {
+  // Convert \eqref and \ref to temporary placeholders before KaTeX processing
+  const walker = document.createTreeWalker(
+    document.body,
+    NodeFilter.SHOW_TEXT,
+    null,
+    false
+  );
+  
+  const textNodes = [];
+  let node;
+  while (node = walker.nextNode()) {
+    if (node.textContent.includes('\\eqref') || node.textContent.includes('\\ref')) {
+      textNodes.push(node);
+    }
+  }
+  
+  textNodes.forEach(function(textNode) {
+    let content = textNode.textContent;
+    content = content.replace(/\\eqref\{([^}]+)\}/g, '<span class="eq-ref-placeholder" data-ref="$1" data-type="eqref"></span>');
+    content = content.replace(/\\ref\{([^}]+)\}/g, '<span class="eq-ref-placeholder" data-ref="$1" data-type="ref"></span>');
+    
+    if (content !== textNode.textContent) {
+      const wrapper = document.createElement('span');
+      wrapper.innerHTML = content;
+      textNode.parentNode.replaceChild(wrapper, textNode);
+    }
+  });
+}
+
+function numberEquations() {
+  let equationNumber = 1;
+  const equationMap = new Map();
+  
+  // Find all display math elements
+  const displayMath = document.querySelectorAll('.katex-display');
+  
+  displayMath.forEach(function(mathElement) {
+    // Get the original LaTeX source from the script tag
+    const scriptTag = mathElement.previousElementSibling;
+    let mathContent = '';
+    
+    if (scriptTag && scriptTag.tagName === 'SCRIPT' && scriptTag.type === 'math/tex; mode=display') {
+      mathContent = scriptTag.textContent;
+    } else {
+      mathContent = mathElement.textContent || mathElement.innerText;
+    }
+    
+    // Check if it should be numbered (not \begin{equation*} or similar unnumbered)
+    if ((mathContent.includes('\\begin{equation}') || 
+         mathContent.includes('\\begin{align}') ||
+         mathContent.trim().startsWith('\\[')) &&
+        !mathContent.includes('\\begin{equation*}') &&
+        !mathContent.includes('\\begin{align*}')) {
+      
+      // Create equation number element
+      const numberSpan = document.createElement('span');
+      numberSpan.className = 'equation-number';
+      numberSpan.textContent = `(${equationNumber})`;
+      
+      // Position the number
+      mathElement.style.position = 'relative';
+      mathElement.appendChild(numberSpan);
+      
+      // Extract label if present
+      const labelMatch = mathContent.match(/\\label\{([^}]+)\}/);
+      if (labelMatch) {
+        const label = labelMatch[1];
+        mathElement.setAttribute('data-label', label);
+        mathElement.id = `eq:${label}`;
+        equationMap.set(label, equationNumber);
+      } else {
+        mathElement.id = `eq:${equationNumber}`;
+      }
+      
+      equationNumber++;
+    }
+  });
+  
+  // Store equation map globally for reference linking
+  window.equationMap = equationMap;
+}
+
+function linkEquationReferences() {
+  // Replace placeholders with actual links
+  const placeholders = document.querySelectorAll('.eq-ref-placeholder');
+  
+  placeholders.forEach(function(placeholder) {
+    const ref = placeholder.getAttribute('data-ref');
+    const type = placeholder.getAttribute('data-type');
+    
+    const link = document.createElement('a');
+    link.href = `#eq:${ref}`;
+    link.className = 'eqref';
+    
+    if (type === 'eqref') {
+      // Find the equation number for this reference
+      const equationNumber = window.equationMap ? window.equationMap.get(ref) : ref;
+      link.textContent = `(${equationNumber || ref})`;
+    } else {
+      link.textContent = ref;
+    }
+    
+    placeholder.parentNode.replaceChild(link, placeholder);
+  });
+}
+</script>
+
+<!-- Reading Progress & Modern Enhancements -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Reading progress indicator
+  const progressBar = document.createElement('div');
+  progressBar.id = 'reading-progress';
+  progressBar.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--link-color), var(--link-hover));
+    z-index: 1000;
+    transition: width 0.1s ease;
+    border-radius: 0 3px 3px 0;
+  `;
+  document.body.appendChild(progressBar);
+  
+  // Update progress on scroll
+  function updateReadingProgress() {
+    const scrollTop = window.pageYOffset;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrollPercent = (scrollTop / docHeight) * 100;
+    progressBar.style.width = scrollPercent + '%';
+  }
+  
+  window.addEventListener('scroll', updateReadingProgress);
+  
+  // Add reading time estimate
+  addReadingTime();
+});
+
+function addReadingTime() {
+  const content = document.querySelector('.page-content');
+  if (!content) return;
+  
+  const text = content.innerText || content.textContent;
+  const wordsPerMinute = 200;
+  const words = text.trim().split(/\s+/).length;
+  const readingTime = Math.ceil(words / wordsPerMinute);
+  
+  // Find the post header area
+  const postHeader = document.querySelector('.post-header') || 
+                     document.querySelector('h1') || 
+                     content.querySelector('h1');
+  
+  if (postHeader) {
+    const readingIndicator = document.createElement('div');
+    readingIndicator.style.cssText = `
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      font-style: italic;
+    `;
+    readingIndicator.textContent = `${readingTime} min read • ${words} words`;
+    
+    postHeader.parentNode.insertBefore(readingIndicator, postHeader.nextSibling);
+  }
+}
+</script>
+
+<!-- Modern Code Block Enhancement -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Initialize highlight.js
+  hljs.highlightAll();
+  
+  // Add copy buttons, line numbers, and collapsible functionality to all code blocks
+  const codeBlocks = document.querySelectorAll('pre code');
+  
+  codeBlocks.forEach(function(codeBlock, index) {
+    const pre = codeBlock.parentElement;
+    
+    // Wrap in container for styling
+    if (!pre.parentElement.classList.contains('code-container')) {
+      const container = document.createElement('div');
+      container.className = 'code-container';
+      pre.parentElement.insertBefore(container, pre);
+      container.appendChild(pre);
+    }
+    
+    // Check if code block is long enough to be collapsible (>15 lines)
+    const lines = codeBlock.textContent.split('\n').length;
+    const isLongCode = lines > 15;
+    
+    // Add copy button
+    if (!pre.querySelector('.copy-button')) {
+      const copyButton = document.createElement('button');
+      copyButton.className = 'copy-button';
+      copyButton.innerHTML = 'Copy';
+      copyButton.title = 'Copy code';
+      
+      copyButton.addEventListener('click', function() {
+        navigator.clipboard.writeText(codeBlock.textContent).then(function() {
+          copyButton.innerHTML = 'Copied';
+          copyButton.title = 'Copied!';
+          setTimeout(function() {
+            copyButton.innerHTML = 'Copy';
+            copyButton.title = 'Copy code';
+          }, 2000);
+        });
+      });
+      
+      pre.appendChild(copyButton);
+    }
+    
+    // Add collapse functionality for long code blocks
+    if (isLongCode && !pre.querySelector('.collapse-button')) {
+      const collapseButton = document.createElement('button');
+      collapseButton.className = 'collapse-button';
+      collapseButton.innerHTML = 'Collapse';
+      collapseButton.title = 'Collapse code';
+      
+      // Initially collapsed for very long code
+      if (lines > 25) {
+        pre.classList.add('collapsed');
+        collapseButton.innerHTML = 'Expand';
+        collapseButton.title = 'Expand code';
+      }
+      
+      collapseButton.addEventListener('click', function() {
+        pre.classList.toggle('collapsed');
+        if (pre.classList.contains('collapsed')) {
+          collapseButton.innerHTML = 'Expand';
+          collapseButton.title = 'Expand code';
+        } else {
+          collapseButton.innerHTML = 'Collapse';
+          collapseButton.title = 'Collapse code';
+        }
+      });
+      
+      pre.appendChild(collapseButton);
+    }
+    
+    // Add line numbers
+    if (!pre.classList.contains('has-line-numbers')) {
+      const lines = codeBlock.textContent.split('\n');
+      if (lines.length > 1) {
+        const lineNumbers = document.createElement('div');
+        lineNumbers.className = 'line-numbers';
+        
+        for (let i = 1; i <= lines.length - 1; i++) {
+          const lineNumber = document.createElement('span');
+          lineNumber.textContent = i;
+          lineNumbers.appendChild(lineNumber);
+        }
+        
+        pre.insertBefore(lineNumbers, codeBlock);
+        pre.classList.add('has-line-numbers');
+      }
+    }
+  });
+});
+</script>
+
+<!-- Dark mode toggle script -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const themeToggle = document.getElementById('theme-toggle');
+  const themeIcon = document.querySelector('.theme-icon');
+  const html = document.documentElement;
+  
+  // Get stored theme or detect system preference
+  function getStoredTheme() {
+    return localStorage.getItem('theme');
+  }
+  
+  function getSystemTheme() {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  
+  function getCurrentTheme() {
+    return getStoredTheme() || getSystemTheme();
+  }
+  
+  // Apply theme
+  function applyTheme(theme) {
+    // Theme is already set in head, just update icon and storage
+    if (themeIcon) {
+      themeIcon.textContent = theme === 'dark' ? 'Light' : 'Dark';
+    }
+    localStorage.setItem('theme', theme);
+    
+    // Switch highlight.js themes
+    const lightTheme = document.getElementById('highlight-light');
+    const darkTheme = document.getElementById('highlight-dark');
+    
+    if (lightTheme && darkTheme) {
+      if (theme === 'dark') {
+        lightTheme.disabled = true;
+        darkTheme.disabled = false;
+      } else {
+        lightTheme.disabled = false;
+        darkTheme.disabled = true;
+      }
+    }
+  }
+  
+  // Toggle theme
+  function toggleTheme() {
+    const currentTheme = html.getAttribute('data-theme') || getCurrentTheme();
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', newTheme);
+    applyTheme(newTheme);
+  }
+  
+  // Initialize theme (data-theme already set in head, just update UI)
+  const currentTheme = getCurrentTheme();
+  applyTheme(currentTheme);
+  
+  // Add event listener
+  if (themeToggle) {
+    themeToggle.addEventListener('click', toggleTheme);
+  }
+  
+  // Listen for system theme changes
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+    if (!getStoredTheme()) {
+      const newTheme = e.matches ? 'dark' : 'light';
+      html.setAttribute('data-theme', newTheme);
+      applyTheme(newTheme);
+    }
+  });
+  
+  // Simple search functionality
+  function initializeSearch() {
+    const searchToggle = document.getElementById('search-toggle');
+    const searchInput = document.getElementById('search-input');
+    const trigger = document.querySelector('.trigger');
+    
+    if (!searchToggle || !searchInput) return;
+    
+    // Toggle search input visibility
+    searchToggle.addEventListener('click', function() {
+      const isVisible = searchInput.style.display !== 'none';
+      searchInput.style.display = isVisible ? 'none' : 'inline-block';
+      if (!isVisible) {
+        searchInput.focus();
+      } else {
+        hideSearchResults();
+      }
+    });
+    
+    // Hide search when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!trigger.contains(e.target)) {
+        searchInput.style.display = 'none';
+        hideSearchResults();
+      }
+    });
+    
+    // Search functionality
+    searchInput.addEventListener('input', function() {
+      const query = this.value.trim();
+      if (query.length < 2) {
+        hideSearchResults();
+        return;
+      }
+      performSearch(query);
+    });
+    
+    function performSearch(query) {
+      // Simple client-side search
+      const results = [];
+      const links = document.querySelectorAll('.site-nav .page-link, .post-link');
+      
+      links.forEach(function(link) {
+        const title = link.textContent.toLowerCase();
+        if (title.includes(query.toLowerCase())) {
+          results.push({
+            title: link.textContent,
+            url: link.href,
+            excerpt: 'Match found in: ' + title
+          });
+        }
+      });
+      
+      showSearchResults(results);
+    }
+    
+    function showSearchResults(results) {
+      hideSearchResults();
+      
+      if (results.length === 0) {
+        const resultsContainer = document.createElement('div');
+        resultsContainer.className = 'search-results';
+        resultsContainer.innerHTML = '<div class="search-result"><p>No results found</p></div>';
+        trigger.style.position = 'relative';
+        trigger.appendChild(resultsContainer);
+        return;
+      }
+      
+      const resultsContainer = document.createElement('div');
+      resultsContainer.className = 'search-results';
+      
+      results.forEach(function(result) {
+        const resultItem = document.createElement('a');
+        resultItem.href = result.url;
+        resultItem.className = 'search-result';
+        resultItem.innerHTML = '<h4>' + result.title + '</h4><p>' + result.excerpt + '</p>';
+        resultsContainer.appendChild(resultItem);
+      });
+      
+      trigger.style.position = 'relative';
+      trigger.appendChild(resultsContainer);
+    }
+    
+    function hideSearchResults() {
+      const existing = document.querySelector('.search-results');
+      if (existing) {
+        existing.remove();
+      }
+    }
+  }
+  
+  // Initialize search when DOM is loaded
+  initializeSearch();
+});
+</script>
+</body>
+</body>
+
+</html>

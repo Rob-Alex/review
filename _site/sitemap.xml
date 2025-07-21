@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+<loc>http://localhost:4001/2025/06/01/building-a-compute-library.html</loc>
+<lastmod>2025-06-01T00:00:00+01:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4001/about/</loc>
+</url>
+<url>
+<loc>http://localhost:4001/_layouts/home.html</loc>
+</url>
+<url>
+<loc>http://localhost:4001/home.html</loc>
+</url>
+<url>
+<loc>http://localhost:4001/</loc>
+</url>
+<url>
+<loc>http://localhost:4001/_layouts/page.html</loc>
+</url>
+<url>
+<loc>http://localhost:4001/_layouts/post.html</loc>
+</url>
+<url>
+<loc>http://localhost:4001/_layouts/base.html</loc>
+<lastmod>2025-07-21T11:37:50+01:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4001/_layouts/default.html</loc>
+<lastmod>2025-07-21T11:37:50+01:00</lastmod>
+</url>
+</urlset>

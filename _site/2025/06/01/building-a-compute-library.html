@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+
+  <!-- Load KaTeX (Latest Version) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha512-ZqiWzpHm6oG3MiQg5P8tGgNNTNtrMTzgfqlZXCPWZ6f7QVjm4n7xF0WGI3WgJLnxXh+HjRwu8d6Y3EAgv+WZBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" integrity="sha512-LqAYXyJAmwp8k1jdxNF3rD1Hl7l3YdL+TNkxbgOFON5hYgGcx5Kj2JckKTcSKF3yN6HhSPWzfnvfwLcf9n5XCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <!-- KaTeX Auto-render for automatic math rendering -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" integrity="sha512-iWiuBS5nt6r60fCz26Nd0Zqe0nbk1ZTIQbl3Kv7kYsX+yKMUFHzjaH2+AnM6vp2Xs+gNmaBAVWJjSmuPw76Efg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <!-- Highlight.js for modern syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="highlight-light">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="highlight-dark" disabled>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <!-- Additional language support -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/lisp.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/lua.min.js"></script>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Preload Inter for body text and JetBrains Mono for code -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Building A Compute Library | Robbie’s Blog - Review Site</title>
+<meta name="generator" content="Jekyll v3.9.5" />
+<meta property="og:title" content="Building A Compute Library" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Review and staging environment for blog posts and features." />
+<meta property="og:description" content="Review and staging environment for blog posts and features." />
+<link rel="canonical" href="http://localhost:4001/2025/06/01/building-a-compute-library.html" />
+<meta property="og:url" content="http://localhost:4001/2025/06/01/building-a-compute-library.html" />
+<meta property="og:site_name" content="Robbie’s Blog - Review Site" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-06-01T00:00:00+01:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Building A Compute Library" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-06-01T00:00:00+01:00","datePublished":"2025-06-01T00:00:00+01:00","description":"Review and staging environment for blog posts and features.","headline":"Building A Compute Library","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4001/2025/06/01/building-a-compute-library.html"},"url":"http://localhost:4001/2025/06/01/building-a-compute-library.html"}</script>
+<!-- End Jekyll SEO tag -->
+<!-- Load Minima Styles -->
+  <link rel="stylesheet" href="/assets/main.css">
+
+  <!-- Load Custom Styles (Overrides Minima) -->
+  <link rel="stylesheet" href="/assets/css/custom.css">
+  
+  <!-- Review Site Password Protection -->
+  <script src="/assets/js/review-protection.js"></script>
+  
+  <!-- Prevent theme flicker by setting theme immediately -->
+  <script>
+    (function() {
+      function getStoredTheme() {
+        return localStorage.getItem('theme');
+      }
+      
+      function getSystemTheme() {
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      
+      function getCurrentTheme() {
+        return getStoredTheme() || getSystemTheme();
+      }
+      
+      // Apply theme immediately to prevent flicker
+      document.documentElement.setAttribute('data-theme', getCurrentTheme());
+    })();
+  </script><link type="application/atom+xml" rel="alternate" href="http://localhost:4001/feed.xml" title="Robbie's Blog - Review Site" /></head>
+<body><header class="site-header" role="banner">
+  <div class="wrapper"><a class="site-title" rel="author" href="/">Robbie&#39;s Blog - Review Site</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/about/">About</a><input type="text" id="search-input" placeholder="Search posts..." class="search-input" style="display: none;">
+          <button class="search-toggle" id="search-toggle" aria-label="Toggle search">
+            <span class="search-icon">Search</span>
+          </button>
+          <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+            <span class="theme-icon">Dark</span>
+          </button>
+        </div>
+      </nav><link rel="stylesheet" href="/assets/css/custom.css">
+  </div>
+</header>
+
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Building A Compute Library</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2025-06-01T00:00:00+01:00" itemprop="datePublished">Jun 1, 2025
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    
+<h1 id="introduction">Introduction</h1>
+
+<p>This project started during my PhD as I stumbled across the wonderful world of <a href="https://en.wikipedia.org/wiki/Computational_science">scientific computing</a>, where complex physics/maths problems are solved through numerical methods. There are many many aspects to this realm that focus on algorithms and hardware. In this first blog I am focusing on the backend development of my own compute library <code class="language-plaintext highlighter-rouge">tensor-cpp</code> that I will hopefully be able to use during my PhD to develop a <a href="https://en.wikipedia.org/wiki/Finite_volume_method">Finite volume method (FVM)</a> or <a href="https://en.wikipedia.org/wiki/Finite_element_method">Finite element method (FEM)</a> library to model the development of plasma channels for various pulsed power applications.</p>
+
+<p>There are a tonne of great libraries that are already used such as Eigen <a href="#citeproc_bib_item_1">[1]</a>, a fantastic linear algebra library that allows expression-template-based <a href="#citeproc_bib_item_2">[2]</a> work relating to matrices, vectors, etc.</p>
+
+<p>Again one of the interesting ideas I thought would be good to learn was how to properly work with GPUs for scientific computing as the original extent of my knowledge was f32 = bad, and f64 = good. So supporting heterogenous backends with GPU acceleration became one of the ever growing goals to this <code class="language-plaintext highlighter-rouge">tensor-cpp</code></p>
+
+<h1 id="designing-the-library">Designing the Library</h1>
+
+<p>I think the quote “First, solve the problem. Then, <del>write the code</del> implement the solution.” by John Johnson is a good philosphy to live by when developing any new engineering solutions be that in software or hardware worlds. Therefore the first steps were to properly define the scope of our project so we dont inccur <a href="https://en.wikipedia.org/wiki/Technical_debt">tech debt</a> or have massive <a href="https://en.wikipedia.org/wiki/Scope_creep">scope creep</a> along the development lifecycle.</p>
+
+<p>My main wants really stemmed from wanting to learn about scientific computing and HPC in more depth purely for understanding how more complex numerical methods are implemented in simulation software however I managed to define some motivations for the library that stemmed from practical needs of my own if I wanted to continue taking this further, these were:</p>
+
+<ul>
+  <li>
+    <p><strong>Backend-Agnostic Architecture</strong> - The library should be flexibile enough to target different hardware - be that CPU or GPU - without rewriting algorithms for each backend as that would be terribly tedious.</p>
+  </li>
+  <li>
+    <p><strong>Zero-Cost Abstractions</strong> - Honestly this wasn’t a goal at first but after reading about libraries like Eigen, the idead of having abstractions without additonal performance cost sounded great to learn about.</p>
+  </li>
+  <li>
+    <p><strong>Extensible</strong> - The architecture should clearly seperate the concerns of backend operations and computation logic to make it easier to develop the library further as well as for others to pick it up if they so desire.</p>
+  </li>
+  <li>
+    <p><strong>Performance Driven</strong> - High performance is required for large scale simulations and to ensure that these don’t go crazy throughout the lifetime of each simulation it is imperative that we can observe the API’s ability with benchmarking and performance analysis.</p>
+  </li>
+</ul>
+
+<h1 id="developing-an-agnostic-backend">Developing an Agnostic Backend</h1>
+
+<p>I am currently doing all my laptop work on the apple silicon M2 chip which has served me well, therefore the first backend I wanted to be able to support was the Metal API apple provides, to be able to take advantage of the GPU stack.</p>
+
+<p>As a jumping off point, there is a good article that walks through the basic process of using Metal from C++ by <a href="https://larsgeb.github.io/2022/04/20/m1-gpu.html">Lars Gebraad</a>. This highlights the necessary processes involved in compiling the metal shaders and linking against the necessary frameworks.</p>
+
+<p>Example of using a citation <a href="#citeproc_bib_item_3">[3]</a>. \( \frac{x^2}{x^3} \) is an example equation.
+<a href="#citeproc_bib_item_4">[4]</a></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>int main()
+{
+std::cout &lt;&lt; "Hello World"
+
+}
+</code></pre></div></div>
+
+<h1 id="implementing-the-compute-layer">Implementing the Compute Layer</h1>
+
+<p>Implementation</p>
+
+<h2 id="expression-templates-and-lazy-evaluation">Expression Templates and Lazy Evaluation</h2>
+
+<p>lets talk about expression templates</p>
+
+<h2 id="sending-dispatch-commands">Sending Dispatch Commands</h2>
+
+<p>lets talk about the dispatch commands</p>
+
+<h1 id="managing-memory-and-resources">Managing Memory and Resources</h1>
+
+<h2 id="raii-for-memory-safety-and-lifetime-management">RAII for Memory Safety and Lifetime Management</h2>
+
+<h2 id="unified-buffer-abstraction-for-cpu-and-gpu">Unified Buffer Abstraction for CPU and GPU</h2>
+
+<h2 id="memory-synchronisation">Memory Synchronisation</h2>
+
+<h1 id="performance-and-testing">Performance and Testing</h1>
+
+<h2 id="building-a-performance-measurement-framework">Building a Performance Measurement Framework</h2>
+
+<h2 id="stastical-analysis-and-benchmarking">Stastical Analysis and Benchmarking</h2>
+
+<h1 id="future-work">Future Work</h1>
+
+<h1 id="references">References</h1>
+
+<style>.csl-left-margin{float: left; padding-right: 0em;}
+ .csl-right-inline{margin: 0 0 0 1em;}</style>
+<div class="csl-bib-body">
+  <div class="csl-entry"><a id="citeproc_bib_item_1"></a>
+    <div class="csl-left-margin">[1]</div><div class="csl-right-inline">G. Guennebaud, B. Jacob, and others, “Eigen v3,” 2010, <i>http://eigen.tuxfamily.org</i>.</div>
+  </div>
+  <div class="csl-entry"><a id="citeproc_bib_item_2"></a>
+    <div class="csl-left-margin">[2]</div><div class="csl-right-inline">T. Veldhuizen, “Expression templates,” 1995, <i>https://www.cs.rpi.edu/ musser/design/blitz/exprtmpl.html</i>.</div>
+  </div>
+  <div class="csl-entry"><a id="citeproc_bib_item_3"></a>
+    <div class="csl-left-margin">[3]</div><div class="csl-right-inline">D. A. S. Rees, “An introduction to compact finite differences.” [Online]. Available: <a href="https://people.bath.ac.uk/ensdasr/COMPACT/dasr.compact.pdf">https://people.bath.ac.uk/ensdasr/COMPACT/dasr.compact.pdf</a></div>
+  </div>
+  <div class="csl-entry"><a id="citeproc_bib_item_4"></a>
+    <div class="csl-left-margin">[4]</div><div class="csl-right-inline">L. Gebraad, “M1 gpus for c++ science: Saxpy and finite differences.” [Online]. Available: <a href="https://larsgeb.github.io/2022/04/22/m1-gpu.html">https://larsgeb.github.io/2022/04/22/m1-gpu.html</a></div>
+  </div>
+</div>
+
+
+  </div><a class="u-url" href="/2025/06/01/building-a-compute-library.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">Robbie&#39;s Blog - Review Site</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">Robbie&#39;s Blog - Review Site</li><li><a class="u-email" href="mailto:rob.alexander.115@gmail.com">rob.alexander.115@gmail.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/Rob-Alex"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">Rob-Alex</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>Review and staging environment for blog posts and features.</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+<!-- KaTeX Auto-render Initialization with Equation Numbering -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  // Pre-process equation references before KaTeX renders
+  processEquationReferences();
+  
+  // Render math with KaTeX
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$', right: '$', display: false},
+      {left: '\\(', right: '\\)', display: false},
+      {left: '\\[', right: '\\]', display: true}
+    ],
+    throwOnError: false
+  });
+  
+  // Add equation numbers after KaTeX renders
+  setTimeout(function() {
+    numberEquations();
+    linkEquationReferences();
+  }, 100);
+});
+
+function processEquationReferences() {
+  // Convert \eqref and \ref to temporary placeholders before KaTeX processing
+  const walker = document.createTreeWalker(
+    document.body,
+    NodeFilter.SHOW_TEXT,
+    null,
+    false
+  );
+  
+  const textNodes = [];
+  let node;
+  while (node = walker.nextNode()) {
+    if (node.textContent.includes('\\eqref') || node.textContent.includes('\\ref')) {
+      textNodes.push(node);
+    }
+  }
+  
+  textNodes.forEach(function(textNode) {
+    let content = textNode.textContent;
+    content = content.replace(/\\eqref\{([^}]+)\}/g, '<span class="eq-ref-placeholder" data-ref="$1" data-type="eqref"></span>');
+    content = content.replace(/\\ref\{([^}]+)\}/g, '<span class="eq-ref-placeholder" data-ref="$1" data-type="ref"></span>');
+    
+    if (content !== textNode.textContent) {
+      const wrapper = document.createElement('span');
+      wrapper.innerHTML = content;
+      textNode.parentNode.replaceChild(wrapper, textNode);
+    }
+  });
+}
+
+function numberEquations() {
+  let equationNumber = 1;
+  const equationMap = new Map();
+  
+  // Find all display math elements
+  const displayMath = document.querySelectorAll('.katex-display');
+  
+  displayMath.forEach(function(mathElement) {
+    // Get the original LaTeX source from the script tag
+    const scriptTag = mathElement.previousElementSibling;
+    let mathContent = '';
+    
+    if (scriptTag && scriptTag.tagName === 'SCRIPT' && scriptTag.type === 'math/tex; mode=display') {
+      mathContent = scriptTag.textContent;
+    } else {
+      mathContent = mathElement.textContent || mathElement.innerText;
+    }
+    
+    // Check if it should be numbered (not \begin{equation*} or similar unnumbered)
+    if ((mathContent.includes('\\begin{equation}') || 
+         mathContent.includes('\\begin{align}') ||
+         mathContent.trim().startsWith('\\[')) &&
+        !mathContent.includes('\\begin{equation*}') &&
+        !mathContent.includes('\\begin{align*}')) {
+      
+      // Create equation number element
+      const numberSpan = document.createElement('span');
+      numberSpan.className = 'equation-number';
+      numberSpan.textContent = `(${equationNumber})`;
+      
+      // Position the number
+      mathElement.style.position = 'relative';
+      mathElement.appendChild(numberSpan);
+      
+      // Extract label if present
+      const labelMatch = mathContent.match(/\\label\{([^}]+)\}/);
+      if (labelMatch) {
+        const label = labelMatch[1];
+        mathElement.setAttribute('data-label', label);
+        mathElement.id = `eq:${label}`;
+        equationMap.set(label, equationNumber);
+      } else {
+        mathElement.id = `eq:${equationNumber}`;
+      }
+      
+      equationNumber++;
+    }
+  });
+  
+  // Store equation map globally for reference linking
+  window.equationMap = equationMap;
+}
+
+function linkEquationReferences() {
+  // Replace placeholders with actual links
+  const placeholders = document.querySelectorAll('.eq-ref-placeholder');
+  
+  placeholders.forEach(function(placeholder) {
+    const ref = placeholder.getAttribute('data-ref');
+    const type = placeholder.getAttribute('data-type');
+    
+    const link = document.createElement('a');
+    link.href = `#eq:${ref}`;
+    link.className = 'eqref';
+    
+    if (type === 'eqref') {
+      // Find the equation number for this reference
+      const equationNumber = window.equationMap ? window.equationMap.get(ref) : ref;
+      link.textContent = `(${equationNumber || ref})`;
+    } else {
+      link.textContent = ref;
+    }
+    
+    placeholder.parentNode.replaceChild(link, placeholder);
+  });
+}
+</script>
+
+<!-- Reading Progress & Modern Enhancements -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Reading progress indicator
+  const progressBar = document.createElement('div');
+  progressBar.id = 'reading-progress';
+  progressBar.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--link-color), var(--link-hover));
+    z-index: 1000;
+    transition: width 0.1s ease;
+    border-radius: 0 3px 3px 0;
+  `;
+  document.body.appendChild(progressBar);
+  
+  // Update progress on scroll
+  function updateReadingProgress() {
+    const scrollTop = window.pageYOffset;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrollPercent = (scrollTop / docHeight) * 100;
+    progressBar.style.width = scrollPercent + '%';
+  }
+  
+  window.addEventListener('scroll', updateReadingProgress);
+  
+  // Add reading time estimate
+  addReadingTime();
+});
+
+function addReadingTime() {
+  const content = document.querySelector('.page-content');
+  if (!content) return;
+  
+  const text = content.innerText || content.textContent;
+  const wordsPerMinute = 200;
+  const words = text.trim().split(/\s+/).length;
+  const readingTime = Math.ceil(words / wordsPerMinute);
+  
+  // Find the post header area
+  const postHeader = document.querySelector('.post-header') || 
+                     document.querySelector('h1') || 
+                     content.querySelector('h1');
+  
+  if (postHeader) {
+    const readingIndicator = document.createElement('div');
+    readingIndicator.style.cssText = `
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      font-style: italic;
+    `;
+    readingIndicator.textContent = `${readingTime} min read • ${words} words`;
+    
+    postHeader.parentNode.insertBefore(readingIndicator, postHeader.nextSibling);
+  }
+}
+</script>
+
+<!-- Modern Code Block Enhancement -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Initialize highlight.js
+  hljs.highlightAll();
+  
+  // Add copy buttons, line numbers, and collapsible functionality to all code blocks
+  const codeBlocks = document.querySelectorAll('pre code');
+  
+  codeBlocks.forEach(function(codeBlock, index) {
+    const pre = codeBlock.parentElement;
+    
+    // Wrap in container for styling
+    if (!pre.parentElement.classList.contains('code-container')) {
+      const container = document.createElement('div');
+      container.className = 'code-container';
+      pre.parentElement.insertBefore(container, pre);
+      container.appendChild(pre);
+    }
+    
+    // Check if code block is long enough to be collapsible (>15 lines)
+    const lines = codeBlock.textContent.split('\n').length;
+    const isLongCode = lines > 15;
+    
+    // Add copy button
+    if (!pre.querySelector('.copy-button')) {
+      const copyButton = document.createElement('button');
+      copyButton.className = 'copy-button';
+      copyButton.innerHTML = 'Copy';
+      copyButton.title = 'Copy code';
+      
+      copyButton.addEventListener('click', function() {
+        navigator.clipboard.writeText(codeBlock.textContent).then(function() {
+          copyButton.innerHTML = 'Copied';
+          copyButton.title = 'Copied!';
+          setTimeout(function() {
+            copyButton.innerHTML = 'Copy';
+            copyButton.title = 'Copy code';
+          }, 2000);
+        });
+      });
+      
+      pre.appendChild(copyButton);
+    }
+    
+    // Add collapse functionality for long code blocks
+    if (isLongCode && !pre.querySelector('.collapse-button')) {
+      const collapseButton = document.createElement('button');
+      collapseButton.className = 'collapse-button';
+      collapseButton.innerHTML = 'Collapse';
+      collapseButton.title = 'Collapse code';
+      
+      // Initially collapsed for very long code
+      if (lines > 25) {
+        pre.classList.add('collapsed');
+        collapseButton.innerHTML = 'Expand';
+        collapseButton.title = 'Expand code';
+      }
+      
+      collapseButton.addEventListener('click', function() {
+        pre.classList.toggle('collapsed');
+        if (pre.classList.contains('collapsed')) {
+          collapseButton.innerHTML = 'Expand';
+          collapseButton.title = 'Expand code';
+        } else {
+          collapseButton.innerHTML = 'Collapse';
+          collapseButton.title = 'Collapse code';
+        }
+      });
+      
+      pre.appendChild(collapseButton);
+    }
+    
+    // Add line numbers
+    if (!pre.classList.contains('has-line-numbers')) {
+      const lines = codeBlock.textContent.split('\n');
+      if (lines.length > 1) {
+        const lineNumbers = document.createElement('div');
+        lineNumbers.className = 'line-numbers';
+        
+        for (let i = 1; i <= lines.length - 1; i++) {
+          const lineNumber = document.createElement('span');
+          lineNumber.textContent = i;
+          lineNumbers.appendChild(lineNumber);
+        }
+        
+        pre.insertBefore(lineNumbers, codeBlock);
+        pre.classList.add('has-line-numbers');
+      }
+    }
+  });
+});
+</script>
+
+<!-- Dark mode toggle script -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const themeToggle = document.getElementById('theme-toggle');
+  const themeIcon = document.querySelector('.theme-icon');
+  const html = document.documentElement;
+  
+  // Get stored theme or detect system preference
+  function getStoredTheme() {
+    return localStorage.getItem('theme');
+  }
+  
+  function getSystemTheme() {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  
+  function getCurrentTheme() {
+    return getStoredTheme() || getSystemTheme();
+  }
+  
+  // Apply theme
+  function applyTheme(theme) {
+    // Theme is already set in head, just update icon and storage
+    if (themeIcon) {
+      themeIcon.textContent = theme === 'dark' ? 'Light' : 'Dark';
+    }
+    localStorage.setItem('theme', theme);
+    
+    // Switch highlight.js themes
+    const lightTheme = document.getElementById('highlight-light');
+    const darkTheme = document.getElementById('highlight-dark');
+    
+    if (lightTheme && darkTheme) {
+      if (theme === 'dark') {
+        lightTheme.disabled = true;
+        darkTheme.disabled = false;
+      } else {
+        lightTheme.disabled = false;
+        darkTheme.disabled = true;
+      }
+    }
+  }
+  
+  // Toggle theme
+  function toggleTheme() {
+    const currentTheme = html.getAttribute('data-theme') || getCurrentTheme();
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', newTheme);
+    applyTheme(newTheme);
+  }
+  
+  // Initialize theme (data-theme already set in head, just update UI)
+  const currentTheme = getCurrentTheme();
+  applyTheme(currentTheme);
+  
+  // Add event listener
+  if (themeToggle) {
+    themeToggle.addEventListener('click', toggleTheme);
+  }
+  
+  // Listen for system theme changes
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+    if (!getStoredTheme()) {
+      const newTheme = e.matches ? 'dark' : 'light';
+      html.setAttribute('data-theme', newTheme);
+      applyTheme(newTheme);
+    }
+  });
+  
+  // Simple search functionality
+  function initializeSearch() {
+    const searchToggle = document.getElementById('search-toggle');
+    const searchInput = document.getElementById('search-input');
+    const trigger = document.querySelector('.trigger');
+    
+    if (!searchToggle || !searchInput) return;
+    
+    // Toggle search input visibility
+    searchToggle.addEventListener('click', function() {
+      const isVisible = searchInput.style.display !== 'none';
+      searchInput.style.display = isVisible ? 'none' : 'inline-block';
+      if (!isVisible) {
+        searchInput.focus();
+      } else {
+        hideSearchResults();
+      }
+    });
+    
+    // Hide search when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!trigger.contains(e.target)) {
+        searchInput.style.display = 'none';
+        hideSearchResults();
+      }
+    });
+    
+    // Search functionality
+    searchInput.addEventListener('input', function() {
+      const query = this.value.trim();
+      if (query.length < 2) {
+        hideSearchResults();
+        return;
+      }
+      performSearch(query);
+    });
+    
+    function performSearch(query) {
+      // Simple client-side search
+      const results = [];
+      const links = document.querySelectorAll('.site-nav .page-link, .post-link');
+      
+      links.forEach(function(link) {
+        const title = link.textContent.toLowerCase();
+        if (title.includes(query.toLowerCase())) {
+          results.push({
+            title: link.textContent,
+            url: link.href,
+            excerpt: 'Match found in: ' + title
+          });
+        }
+      });
+      
+      showSearchResults(results);
+    }
+    
+    function showSearchResults(results) {
+      hideSearchResults();
+      
+      if (results.length === 0) {
+        const resultsContainer = document.createElement('div');
+        resultsContainer.className = 'search-results';
+        resultsContainer.innerHTML = '<div class="search-result"><p>No results found</p></div>';
+        trigger.style.position = 'relative';
+        trigger.appendChild(resultsContainer);
+        return;
+      }
+      
+      const resultsContainer = document.createElement('div');
+      resultsContainer.className = 'search-results';
+      
+      results.forEach(function(result) {
+        const resultItem = document.createElement('a');
+        resultItem.href = result.url;
+        resultItem.className = 'search-result';
+        resultItem.innerHTML = '<h4>' + result.title + '</h4><p>' + result.excerpt + '</p>';
+        resultsContainer.appendChild(resultItem);
+      });
+      
+      trigger.style.position = 'relative';
+      trigger.appendChild(resultsContainer);
+    }
+    
+    function hideSearchResults() {
+      const existing = document.querySelector('.search-results');
+      if (existing) {
+        existing.remove();
+      }
+    }
+  }
+  
+  // Initialize search when DOM is loaded
+  initializeSearch();
+});
+</script>
+</body>
+</body>
+
+</html>
