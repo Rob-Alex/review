@@ -1,0 +1,489 @@
+<footer class="site-footer h-card">
+  <data class="u-url" href="{{ "/" | relative_url }}"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">{{ site.title | escape }}</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">
+            {%- if site.author -%}
+              {{ site.author | escape }}
+            {%- else -%}
+              {{ site.title | escape }}
+            {%- endif -%}
+            </li>
+            {%- if site.email -%}
+            <li><a class="u-email" href="mailto:{{ site.email }}">{{ site.email }}</a></li>
+            {%- endif -%}
+        </ul>
+      </div>
+
+      <div class="footer-col footer-col-2">
+        {%- include social.html -%}
+      </div>
+
+      <div class="footer-col footer-col-3">
+        <p>{{- site.description | escape -}}</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+<!-- KaTeX Auto-render Initialization with Equation Numbering -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  // Pre-process equation references before KaTeX renders
+  processEquationReferences();
+  
+  // Render math with KaTeX
+  renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '$', right: '$', display: false},
+      {left: '\\(', right: '\\)', display: false},
+      {left: '\\[', right: '\\]', display: true}
+    ],
+    throwOnError: false
+  });
+  
+  // Add equation numbers after KaTeX renders
+  setTimeout(function() {
+    numberEquations();
+    linkEquationReferences();
+  }, 100);
+});
+
+function processEquationReferences() {
+  // Convert \eqref and \ref to temporary placeholders before KaTeX processing
+  const walker = document.createTreeWalker(
+    document.body,
+    NodeFilter.SHOW_TEXT,
+    null,
+    false
+  );
+  
+  const textNodes = [];
+  let node;
+  while (node = walker.nextNode()) {
+    if (node.textContent.includes('\\eqref') || node.textContent.includes('\\ref')) {
+      textNodes.push(node);
+    }
+  }
+  
+  textNodes.forEach(function(textNode) {
+    let content = textNode.textContent;
+    content = content.replace(/\\eqref\{([^}]+)\}/g, '<span class="eq-ref-placeholder" data-ref="$1" data-type="eqref"></span>');
+    content = content.replace(/\\ref\{([^}]+)\}/g, '<span class="eq-ref-placeholder" data-ref="$1" data-type="ref"></span>');
+    
+    if (content !== textNode.textContent) {
+      const wrapper = document.createElement('span');
+      wrapper.innerHTML = content;
+      textNode.parentNode.replaceChild(wrapper, textNode);
+    }
+  });
+}
+
+function numberEquations() {
+  let equationNumber = 1;
+  const equationMap = new Map();
+  
+  // Find all display math elements
+  const displayMath = document.querySelectorAll('.katex-display');
+  
+  displayMath.forEach(function(mathElement) {
+    // Get the original LaTeX source from the script tag
+    const scriptTag = mathElement.previousElementSibling;
+    let mathContent = '';
+    
+    if (scriptTag && scriptTag.tagName === 'SCRIPT' && scriptTag.type === 'math/tex; mode=display') {
+      mathContent = scriptTag.textContent;
+    } else {
+      mathContent = mathElement.textContent || mathElement.innerText;
+    }
+    
+    // Check if it should be numbered (not \begin{equation*} or similar unnumbered)
+    if ((mathContent.includes('\\begin{equation}') || 
+         mathContent.includes('\\begin{align}') ||
+         mathContent.trim().startsWith('\\[')) &&
+        !mathContent.includes('\\begin{equation*}') &&
+        !mathContent.includes('\\begin{align*}')) {
+      
+      // Create equation number element
+      const numberSpan = document.createElement('span');
+      numberSpan.className = 'equation-number';
+      numberSpan.textContent = `(${equationNumber})`;
+      
+      // Position the number
+      mathElement.style.position = 'relative';
+      mathElement.appendChild(numberSpan);
+      
+      // Extract label if present
+      const labelMatch = mathContent.match(/\\label\{([^}]+)\}/);
+      if (labelMatch) {
+        const label = labelMatch[1];
+        mathElement.setAttribute('data-label', label);
+        mathElement.id = `eq:${label}`;
+        equationMap.set(label, equationNumber);
+      } else {
+        mathElement.id = `eq:${equationNumber}`;
+      }
+      
+      equationNumber++;
+    }
+  });
+  
+  // Store equation map globally for reference linking
+  window.equationMap = equationMap;
+}
+
+function linkEquationReferences() {
+  // Replace placeholders with actual links
+  const placeholders = document.querySelectorAll('.eq-ref-placeholder');
+  
+  placeholders.forEach(function(placeholder) {
+    const ref = placeholder.getAttribute('data-ref');
+    const type = placeholder.getAttribute('data-type');
+    
+    const link = document.createElement('a');
+    link.href = `#eq:${ref}`;
+    link.className = 'eqref';
+    
+    if (type === 'eqref') {
+      // Find the equation number for this reference
+      const equationNumber = window.equationMap ? window.equationMap.get(ref) : ref;
+      link.textContent = `(${equationNumber || ref})`;
+    } else {
+      link.textContent = ref;
+    }
+    
+    placeholder.parentNode.replaceChild(link, placeholder);
+  });
+}
+</script>
+
+<!-- Reading Progress & Modern Enhancements -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Reading progress indicator
+  const progressBar = document.createElement('div');
+  progressBar.id = 'reading-progress';
+  progressBar.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--link-color), var(--link-hover));
+    z-index: 1000;
+    transition: width 0.1s ease;
+    border-radius: 0 3px 3px 0;
+  `;
+  document.body.appendChild(progressBar);
+  
+  // Update progress on scroll
+  function updateReadingProgress() {
+    const scrollTop = window.pageYOffset;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrollPercent = (scrollTop / docHeight) * 100;
+    progressBar.style.width = scrollPercent + '%';
+  }
+  
+  window.addEventListener('scroll', updateReadingProgress);
+  
+  // Add reading time estimate
+  addReadingTime();
+});
+
+function addReadingTime() {
+  const content = document.querySelector('.page-content');
+  if (!content) return;
+  
+  const text = content.innerText || content.textContent;
+  const wordsPerMinute = 200;
+  const words = text.trim().split(/\s+/).length;
+  const readingTime = Math.ceil(words / wordsPerMinute);
+  
+  // Find the post header area
+  const postHeader = document.querySelector('.post-header') || 
+                     document.querySelector('h1') || 
+                     content.querySelector('h1');
+  
+  if (postHeader) {
+    const readingIndicator = document.createElement('div');
+    readingIndicator.style.cssText = `
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+      font-style: italic;
+    `;
+    readingIndicator.textContent = `${readingTime} min read • ${words} words`;
+    
+    postHeader.parentNode.insertBefore(readingIndicator, postHeader.nextSibling);
+  }
+}
+</script>
+
+<!-- Modern Code Block Enhancement -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Initialize highlight.js
+  hljs.highlightAll();
+  
+  // Add copy buttons, line numbers, and collapsible functionality to all code blocks
+  const codeBlocks = document.querySelectorAll('pre code');
+  
+  codeBlocks.forEach(function(codeBlock, index) {
+    const pre = codeBlock.parentElement;
+    
+    // Wrap in container for styling
+    if (!pre.parentElement.classList.contains('code-container')) {
+      const container = document.createElement('div');
+      container.className = 'code-container';
+      pre.parentElement.insertBefore(container, pre);
+      container.appendChild(pre);
+    }
+    
+    // Check if code block is long enough to be collapsible (>15 lines)
+    const lines = codeBlock.textContent.split('\n').length;
+    const isLongCode = lines > 15;
+    
+    // Add copy button
+    if (!pre.querySelector('.copy-button')) {
+      const copyButton = document.createElement('button');
+      copyButton.className = 'copy-button';
+      copyButton.innerHTML = 'Copy';
+      copyButton.title = 'Copy code';
+      
+      copyButton.addEventListener('click', function() {
+        navigator.clipboard.writeText(codeBlock.textContent).then(function() {
+          copyButton.innerHTML = 'Copied';
+          copyButton.title = 'Copied!';
+          setTimeout(function() {
+            copyButton.innerHTML = 'Copy';
+            copyButton.title = 'Copy code';
+          }, 2000);
+        });
+      });
+      
+      pre.appendChild(copyButton);
+    }
+    
+    // Add collapse functionality for long code blocks
+    if (isLongCode && !pre.querySelector('.collapse-button')) {
+      const collapseButton = document.createElement('button');
+      collapseButton.className = 'collapse-button';
+      collapseButton.innerHTML = 'Collapse';
+      collapseButton.title = 'Collapse code';
+      
+      // Initially collapsed for very long code
+      if (lines > 25) {
+        pre.classList.add('collapsed');
+        collapseButton.innerHTML = 'Expand';
+        collapseButton.title = 'Expand code';
+      }
+      
+      collapseButton.addEventListener('click', function() {
+        pre.classList.toggle('collapsed');
+        if (pre.classList.contains('collapsed')) {
+          collapseButton.innerHTML = 'Expand';
+          collapseButton.title = 'Expand code';
+        } else {
+          collapseButton.innerHTML = 'Collapse';
+          collapseButton.title = 'Collapse code';
+        }
+      });
+      
+      pre.appendChild(collapseButton);
+    }
+    
+    // Add line numbers
+    if (!pre.classList.contains('has-line-numbers')) {
+      const lines = codeBlock.textContent.split('\n');
+      if (lines.length > 1) {
+        const lineNumbers = document.createElement('div');
+        lineNumbers.className = 'line-numbers';
+        
+        for (let i = 1; i <= lines.length - 1; i++) {
+          const lineNumber = document.createElement('span');
+          lineNumber.textContent = i;
+          lineNumbers.appendChild(lineNumber);
+        }
+        
+        pre.insertBefore(lineNumbers, codeBlock);
+        pre.classList.add('has-line-numbers');
+      }
+    }
+  });
+});
+</script>
+
+<!-- Dark mode toggle script -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const themeToggle = document.getElementById('theme-toggle');
+  const themeIcon = document.querySelector('.theme-icon');
+  const html = document.documentElement;
+  
+  // Get stored theme or detect system preference
+  function getStoredTheme() {
+    return localStorage.getItem('theme');
+  }
+  
+  function getSystemTheme() {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  
+  function getCurrentTheme() {
+    return getStoredTheme() || getSystemTheme();
+  }
+  
+  // Apply theme
+  function applyTheme(theme) {
+    // Theme is already set in head, just update icon and storage
+    if (themeIcon) {
+      themeIcon.textContent = theme === 'dark' ? 'Light' : 'Dark';
+    }
+    localStorage.setItem('theme', theme);
+    
+    // Switch highlight.js themes
+    const lightTheme = document.getElementById('highlight-light');
+    const darkTheme = document.getElementById('highlight-dark');
+    
+    if (lightTheme && darkTheme) {
+      if (theme === 'dark') {
+        lightTheme.disabled = true;
+        darkTheme.disabled = false;
+      } else {
+        lightTheme.disabled = false;
+        darkTheme.disabled = true;
+      }
+    }
+  }
+  
+  // Toggle theme
+  function toggleTheme() {
+    const currentTheme = html.getAttribute('data-theme') || getCurrentTheme();
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', newTheme);
+    applyTheme(newTheme);
+  }
+  
+  // Initialize theme (data-theme already set in head, just update UI)
+  const currentTheme = getCurrentTheme();
+  applyTheme(currentTheme);
+  
+  // Add event listener
+  if (themeToggle) {
+    themeToggle.addEventListener('click', toggleTheme);
+  }
+  
+  // Listen for system theme changes
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+    if (!getStoredTheme()) {
+      const newTheme = e.matches ? 'dark' : 'light';
+      html.setAttribute('data-theme', newTheme);
+      applyTheme(newTheme);
+    }
+  });
+  
+  // Simple search functionality
+  function initializeSearch() {
+    const searchToggle = document.getElementById('search-toggle');
+    const searchInput = document.getElementById('search-input');
+    const trigger = document.querySelector('.trigger');
+    
+    if (!searchToggle || !searchInput) return;
+    
+    // Toggle search input visibility
+    searchToggle.addEventListener('click', function() {
+      const isVisible = searchInput.style.display !== 'none';
+      searchInput.style.display = isVisible ? 'none' : 'inline-block';
+      if (!isVisible) {
+        searchInput.focus();
+      } else {
+        hideSearchResults();
+      }
+    });
+    
+    // Hide search when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!trigger.contains(e.target)) {
+        searchInput.style.display = 'none';
+        hideSearchResults();
+      }
+    });
+    
+    // Search functionality
+    searchInput.addEventListener('input', function() {
+      const query = this.value.trim();
+      if (query.length < 2) {
+        hideSearchResults();
+        return;
+      }
+      performSearch(query);
+    });
+    
+    function performSearch(query) {
+      // Simple client-side search
+      const results = [];
+      const links = document.querySelectorAll('.site-nav .page-link, .post-link');
+      
+      links.forEach(function(link) {
+        const title = link.textContent.toLowerCase();
+        if (title.includes(query.toLowerCase())) {
+          results.push({
+            title: link.textContent,
+            url: link.href,
+            excerpt: 'Match found in: ' + title
+          });
+        }
+      });
+      
+      showSearchResults(results);
+    }
+    
+    function showSearchResults(results) {
+      hideSearchResults();
+      
+      if (results.length === 0) {
+        const resultsContainer = document.createElement('div');
+        resultsContainer.className = 'search-results';
+        resultsContainer.innerHTML = '<div class="search-result"><p>No results found</p></div>';
+        trigger.style.position = 'relative';
+        trigger.appendChild(resultsContainer);
+        return;
+      }
+      
+      const resultsContainer = document.createElement('div');
+      resultsContainer.className = 'search-results';
+      
+      results.forEach(function(result) {
+        const resultItem = document.createElement('a');
+        resultItem.href = result.url;
+        resultItem.className = 'search-result';
+        resultItem.innerHTML = '<h4>' + result.title + '</h4><p>' + result.excerpt + '</p>';
+        resultsContainer.appendChild(resultItem);
+      });
+      
+      trigger.style.position = 'relative';
+      trigger.appendChild(resultsContainer);
+    }
+    
+    function hideSearchResults() {
+      const existing = document.querySelector('.search-results');
+      if (existing) {
+        existing.remove();
+      }
+    }
+  }
+  
+  // Initialize search when DOM is loaded
+  initializeSearch();
+});
+</script>
+</body>

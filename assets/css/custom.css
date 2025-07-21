@@ -1,0 +1,628 @@
+/* ===========================
+   CSS Variables for Dark Mode
+   =========================== */
+
+:root {
+  /* Light theme colors */
+  --bg-color: #ffffff;
+  --text-color: #24292f;
+  --text-secondary: #656d76;
+  --border-color: #d0d7de;
+  --code-bg: #f6f8fa;
+  --code-border: #d0d7de;
+  --code-line-bg: #f1f3f4;
+  --header-bg: #ffffff;
+  --link-color: #0969da;
+  --link-hover: #0550ae;
+}
+
+[data-theme="dark"] {
+  /* Dark theme colors */
+  --bg-color: #0d1117;
+  --text-color: #f0f6fc;
+  --text-secondary: #8b949e;
+  --border-color: #30363d;
+  --code-bg: #161b22;
+  --code-border: #30363d;
+  --code-line-bg: #21262d;
+  --header-bg: #161b22;
+  --link-color: #58a6ff;
+  --link-hover: #79c0ff;
+}
+
+/* System preference detection */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg-color: #0d1117;
+    --text-color: #f0f6fc;
+    --text-secondary: #8b949e;
+    --border-color: #30363d;
+    --code-bg: #161b22;
+    --code-border: #30363d;
+    --code-line-bg: #21262d;
+    --header-bg: #161b22;
+    --link-color: #58a6ff;
+    --link-hover: #79c0ff;
+  }
+}
+
+/* Base theme application with Inter for body text */
+body {
+  background-color: var(--bg-color) !important;
+  color: var(--text-color) !important;
+  transition: background-color 0.3s ease, color 0.3s ease !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+  font-size: 16px !important;
+  line-height: 1.6 !important;
+  font-weight: 400 !important;
+  font-feature-settings: 'cv11' 1 !important;  /* Modern Inter number styling */
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+}
+
+/* ===========================
+   Modern Code Blocks with Highlight.js
+   =========================== */
+
+/* Code container */
+.code-container {
+    position: relative;
+    margin: 20px 0;
+}
+
+/* Main code block styling */
+pre {
+    background: var(--code-bg) !important;
+    border: 1px solid var(--code-border) !important;
+    border-radius: 0 !important;  /* Sharp corners to avoid white edge issues */
+    font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', 'Droid Sans Mono', 'Source Code Pro', monospace !important;
+    font-size: 14px !important;
+    line-height: 1.5 !important;
+    margin: 0 !important;
+    overflow-x: auto !important;
+    position: relative !important;
+    transition: background-color 0.3s ease, border-color 0.3s ease !important;
+}
+
+/* Code content with proper scrolling */
+pre code {
+    display: block !important;
+    overflow-x: auto !important;
+    padding: 0 !important;
+    background: none !important;
+    border: none !important;
+    color: inherit !important;
+    font-size: inherit !important;
+    white-space: pre !important;
+}
+
+/* Code blocks with line numbers */
+pre.has-line-numbers {
+    padding: 16px 16px 16px 60px !important;
+}
+
+/* Code blocks without line numbers */
+pre:not(.has-line-numbers) {
+    padding: 16px 20px !important;  /* Added extra left padding for better indentation */
+}
+
+/* Code element inside pre */
+pre code {
+    background: none !important;
+    border: none !important;
+    color: inherit !important;
+    font-size: inherit !important;
+    padding-left: 4px !important;  /* Small additional indent for code text */
+    white-space: pre !important;
+}
+
+/* Line numbers */
+.line-numbers {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    width: 44px !important;
+    background: var(--code-line-bg) !important;
+    border-right: 1px solid var(--code-border) !important;
+    border-radius: 0 !important;  /* Sharp corners */
+    padding: 16px 8px !important;
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+    color: var(--text-secondary) !important;
+    text-align: right !important;
+    user-select: none !important;
+    overflow: hidden !important;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease !important;
+}
+
+.line-numbers span {
+    display: block !important;
+    height: 21px !important;
+}
+
+/* Copy button */
+.copy-button {
+    position: absolute !important;
+    top: 8px !important;
+    right: 8px !important;
+    background: var(--code-line-bg) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 3px !important;
+    color: var(--text-secondary) !important;
+    cursor: pointer !important;
+    font-family: inherit !important;
+    font-size: 11px !important;
+    font-weight: 500 !important;
+    padding: 4px 8px !important;
+    transition: all 0.2s ease !important;
+    opacity: 0 !important;
+    z-index: 2 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+}
+
+.code-container:hover .copy-button {
+    opacity: 1 !important;
+}
+
+.copy-button:hover {
+    background: var(--border-color) !important;
+    color: var(--text-color) !important;
+}
+
+/* Collapse button */
+.collapse-button {
+    position: absolute !important;
+    top: 8px !important;
+    right: 60px !important;  /* Next to copy button */
+    background: var(--code-line-bg) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 3px !important;
+    color: var(--text-secondary) !important;
+    cursor: pointer !important;
+    font-family: inherit !important;
+    font-size: 11px !important;
+    font-weight: 500 !important;
+    padding: 4px 8px !important;
+    transition: all 0.2s ease !important;
+    opacity: 0 !important;
+    z-index: 2 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+}
+
+.code-container:hover .collapse-button {
+    opacity: 1 !important;
+}
+
+.collapse-button:hover {
+    background: var(--border-color) !important;
+    color: var(--text-color) !important;
+}
+
+/* Collapsible code block states */
+pre.collapsed {
+    max-height: 200px !important;
+    overflow: hidden !important;
+    position: relative !important;
+}
+
+pre.collapsed::after {
+    content: '' !important;
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 40px !important;
+    background: linear-gradient(transparent, var(--code-bg)) !important;
+    pointer-events: none !important;
+}
+
+/* Inline code */
+p code, li code, td code {
+    background: var(--code-bg) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 4px !important;
+    color: var(--text-color) !important;
+    font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', monospace !important;
+    font-size: 13px !important;
+    padding: 2px 6px !important;
+    transition: background-color 0.3s ease, border-color 0.3s ease !important;
+}
+
+/* ===========================
+   Dark Mode Theme Styling
+   =========================== */
+
+/* Header and navigation */
+.site-header {
+    background-color: var(--header-bg) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    transition: background-color 0.3s ease, border-color 0.3s ease !important;
+}
+
+.site-title, .site-nav .page-link {
+    color: var(--text-color) !important;
+    transition: color 0.3s ease !important;
+}
+
+.site-nav .page-link:hover {
+    color: var(--link-hover) !important;
+}
+
+/* Links */
+a {
+    color: var(--link-color) !important;
+    transition: color 0.3s ease !important;
+}
+
+a:hover {
+    color: var(--link-hover) !important;
+}
+
+/* Footer */
+.site-footer {
+    background-color: var(--header-bg) !important;
+    border-top: 1px solid var(--border-color) !important;
+    color: var(--text-secondary) !important;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease !important;
+}
+
+/* Search functionality */
+.search-input {
+    background: var(--bg-color) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 4px !important;
+    color: var(--text-color) !important;
+    font-family: inherit !important;
+    font-size: 14px !important;
+    margin-right: 8px !important;
+    padding: 6px 12px !important;
+    transition: all 0.2s ease !important;
+    width: 200px !important;
+}
+
+.search-input:focus {
+    border-color: var(--link-color) !important;
+    outline: none !important;
+    box-shadow: 0 0 0 2px rgba(var(--link-color), 0.2) !important;
+}
+
+.search-toggle {
+    background: none !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 4px !important;
+    color: var(--text-color) !important;
+    cursor: pointer !important;
+    font-family: inherit !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    margin-left: 8px !important;
+    padding: 6px 12px !important;
+    transition: all 0.2s ease !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+}
+
+.search-toggle:hover {
+    background: var(--code-line-bg) !important;
+    border-color: var(--text-secondary) !important;
+}
+
+/* Dark mode toggle button */
+.theme-toggle {
+    background: none !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 4px !important;
+    color: var(--text-color) !important;
+    cursor: pointer !important;
+    font-family: inherit !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    margin-left: 8px !important;
+    padding: 6px 12px !important;
+    transition: all 0.2s ease !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+}
+
+.theme-toggle:hover {
+    background: var(--code-line-bg) !important;
+    border-color: var(--text-secondary) !important;
+}
+
+/* Search results */
+.search-results {
+    position: absolute !important;
+    top: 100% !important;
+    right: 0 !important;
+    background: var(--bg-color) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 6px !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+    max-height: 300px !important;
+    overflow-y: auto !important;
+    width: 300px !important;
+    z-index: 1000 !important;
+    margin-top: 8px !important;
+}
+
+.search-result {
+    border-bottom: 1px solid var(--border-color) !important;
+    padding: 12px !important;
+    transition: background-color 0.2s ease !important;
+}
+
+.search-result:hover {
+    background: var(--code-line-bg) !important;
+}
+
+.search-result:last-child {
+    border-bottom: none !important;
+}
+
+.search-result h4 {
+    color: var(--text-color) !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    margin: 0 0 4px 0 !important;
+}
+
+.search-result p {
+    color: var(--text-secondary) !important;
+    font-size: 12px !important;
+    margin: 0 !important;
+}
+
+/* Dark mode highlight.js theme override */
+[data-theme="dark"] .hljs {
+    background: var(--code-bg) !important;
+    color: #e6edf3 !important;
+}
+
+/* ===========================
+   Equation Numbering Styles
+   =========================== */
+
+/* Equation number positioning */
+.equation-number {
+    position: absolute !important;
+    right: 16px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    color: var(--text-secondary) !important;
+    font-size: 0.9rem !important;
+    font-weight: normal !important;
+    user-select: none !important;
+    pointer-events: none !important;
+}
+
+/* Equation cross-references */
+.eqref {
+    color: var(--link-color) !important;
+    text-decoration: none !important;
+    font-weight: 500 !important;
+    transition: color 0.2s ease !important;
+}
+
+.eqref:hover {
+    color: var(--link-hover) !important;
+    text-decoration: underline !important;
+}
+
+/* Equation containers */
+.katex-display {
+    margin: 1.5rem 0 !important;
+    padding: 1rem 3rem 1rem 1rem !important;
+    border-left: 3px solid var(--border-color) !important;
+    background: rgba(var(--code-bg), 0.3) !important;
+    border-radius: 4px !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Highlight target equation when linked to */
+.katex-display:target {
+    border-left-color: var(--link-color) !important;
+    background: rgba(var(--link-color), 0.1) !important;
+    box-shadow: 0 0 0 1px rgba(var(--link-color), 0.2) !important;
+}
+
+/* ===========================
+   Modern Visual Enhancements
+   =========================== */
+
+/* Improved reading experience with Inter */
+.page-content {
+    font-size: 16px !important;
+    line-height: 1.7 !important;
+    max-width: 65ch !important;  /* Optimal reading width for proportional fonts */
+    margin: 0 auto !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+    font-weight: 400 !important;
+}
+
+/* Subtle hover effects for links */
+.page-content a:not(.eqref) {
+    position: relative !important;
+    text-decoration: none !important;
+    border-bottom: 1px solid transparent !important;
+    transition: all 0.2s ease !important;
+}
+
+.page-content a:not(.eqref):hover {
+    border-bottom-color: var(--link-color) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Modern blockquotes */
+.page-content blockquote {
+    border-left: 3px solid var(--link-color) !important;
+    background: rgba(var(--code-bg), 0.3) !important;
+    padding: 1rem 1.5rem !important;
+    margin: 2rem 0 !important;
+    border-radius: 0 6px 6px 0 !important;
+    font-style: italic !important;
+    color: var(--text-secondary) !important;
+    position: relative !important;
+}
+
+.page-content blockquote:before {
+    content: '"' !important;
+    font-size: 3rem !important;
+    color: var(--link-color) !important;
+    position: absolute !important;
+    top: -0.5rem !important;
+    left: 0.5rem !important;
+    opacity: 0.3 !important;
+    font-family: Georgia, serif !important;
+}
+
+/* Enhanced lists */
+.page-content ul li {
+    margin-bottom: 0.5rem !important;
+    position: relative !important;
+}
+
+.page-content ul li::marker {
+    color: var(--link-color) !important;
+}
+
+/* Subtle animations for interactive elements */
+.theme-toggle, .copy-button, .eqref {
+    transform: translateZ(0) !important;  /* Enable hardware acceleration */
+}
+
+/* Smooth scroll behavior */
+html {
+    scroll-behavior: smooth !important;
+}
+
+/* Focus styles for accessibility */
+*:focus {
+    outline: 2px solid var(--link-color) !important;
+    outline-offset: 2px !important;
+    border-radius: 2px !important;
+}
+
+/* Enhanced table styling */
+.page-content table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+    margin: 2rem 0 !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important;
+}
+
+.page-content th,
+.page-content td {
+    padding: 0.75rem 1rem !important;
+    text-align: left !important;
+    border-bottom: 1px solid var(--border-color) !important;
+}
+
+.page-content th {
+    background: var(--code-line-bg) !important;
+    font-weight: 500 !important;
+    color: var(--text-color) !important;
+}
+
+.page-content tr:hover {
+    background: rgba(var(--code-bg), 0.5) !important;
+}
+
+/* ===========================
+   Justify Main Body Text
+   =========================== */
+
+/* Ensure all paragraph text is justified */
+.page-content p,
+.page-content li,
+.page-content blockquote {
+    text-align: justify !important;
+    hyphens: auto !important; /* Optional: Allows better word breaks */
+}
+
+/* Improve list readability */
+.page-content ul,
+.page-content ol {
+    text-align: left !important; /* Keep lists left-aligned */
+}
+
+/* Modern, elegant header typography */
+.page-content h1,
+.page-content h2,
+.page-content h3,
+.page-content h4,
+.page-content h5,
+.page-content h6 {
+    text-align: left !important;
+    color: var(--text-color) !important;
+    font-weight: 400 !important;  /* Much lighter weight */
+    line-height: 1.3 !important;
+    margin-top: 3rem !important;
+    margin-bottom: 1.5rem !important;
+    letter-spacing: -0.02em !important;  /* Subtle tighter spacing */
+    transition: color 0.3s ease !important;
+}
+
+/* Elegant header hierarchy with modern spacing */
+.page-content h1 {
+    font-size: 2.25rem !important;
+    font-weight: 300 !important;  /* Extra light for main titles */
+    margin-top: 2rem !important;
+    margin-bottom: 2rem !important;
+    position: relative !important;
+}
+
+.page-content h1:after {
+    content: '' !important;
+    position: absolute !important;
+    bottom: -8px !important;
+    left: 0 !important;
+    width: 60px !important;
+    height: 2px !important;
+    background: linear-gradient(90deg, var(--link-color), transparent) !important;
+    border-radius: 1px !important;
+}
+
+.page-content h2 {
+    font-size: 1.75rem !important;
+    font-weight: 300 !important;
+    color: var(--text-color) !important;
+    margin-top: 2.5rem !important;
+}
+
+.page-content h3 {
+    font-size: 1.35rem !important;
+    font-weight: 400 !important;
+    color: var(--text-color) !important;
+}
+
+.page-content h4 {
+    font-size: 1.15rem !important;
+    font-weight: 450 !important;
+    color: var(--text-color) !important;
+}
+
+.page-content h5 {
+    font-size: 0.95rem !important;
+    font-weight: 500 !important;
+    color: var(--text-secondary) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+}
+
+.page-content h6 {
+    font-size: 0.9rem !important;
+    font-weight: 500 !important;
+    color: var(--text-secondary) !important;
+    font-style: italic !important;
+}
+
+/* Fix potential issues with code blocks */
+.page-content pre,
+.page-content code {
+    text-align: left !important; /* Keep code blocks left-aligned */
+}

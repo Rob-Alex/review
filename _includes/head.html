@@ -1,0 +1,57 @@
+<head>
+
+  <!-- Load KaTeX (Latest Version) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" integrity="sha512-ZqiWzpHm6oG3MiQg5P8tGgNNTNtrMTzgfqlZXCPWZ6f7QVjm4n7xF0WGI3WgJLnxXh+HjRwu8d6Y3EAgv+WZBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" integrity="sha512-LqAYXyJAmwp8k1jdxNF3rD1Hl7l3YdL+TNkxbgOFON5hYgGcx5Kj2JckKTcSKF3yN6HhSPWzfnvfwLcf9n5XCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <!-- KaTeX Auto-render for automatic math rendering -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" integrity="sha512-iWiuBS5nt6r60fCz26Nd0Zqe0nbk1ZTIQbl3Kv7kYsX+yKMUFHzjaH2+AnM6vp2Xs+gNmaBAVWJjSmuPw76Efg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <!-- Highlight.js for modern syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css" id="highlight-light">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="highlight-dark" disabled>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <!-- Additional language support -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/lisp.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/lua.min.js"></script>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <!-- Preload Inter for body text and JetBrains Mono for code -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  {%- seo -%}
+
+  <!-- Load Minima Styles -->
+  <link rel="stylesheet" href="{{ "/assets/main.css" | relative_url }}">
+
+  <!-- Load Custom Styles (Overrides Minima) -->
+  <link rel="stylesheet" href="{{ "/assets/css/custom.css" | relative_url }}">
+  
+  <!-- Prevent theme flicker by setting theme immediately -->
+  <script>
+    (function() {
+      function getStoredTheme() {
+        return localStorage.getItem('theme');
+      }
+      
+      function getSystemTheme() {
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      
+      function getCurrentTheme() {
+        return getStoredTheme() || getSystemTheme();
+      }
+      
+      // Apply theme immediately to prevent flicker
+      document.documentElement.setAttribute('data-theme', getCurrentTheme());
+    })();
+  </script>
+
+  {%- feed_meta -%}
+  {%- if jekyll.environment == 'production' and site.google_analytics -%}
+    {%- include google-analytics.html -%}
+  {%- endif -%}
+</head>

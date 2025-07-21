@@ -1,0 +1,33 @@
+title: Robbie's Blog - Review Site
+email: rob.alexander.115@gmail.com
+description: >-
+  Review and staging environment for blog posts and features.
+
+baseurl: ""  # The subpath of your site (keep empty for root)
+url: "https://review.rob-blog.co.uk"  # Review subdomain URL
+github_username: Rob-Alex
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+kramdown:
+  math_engine: mathjax
+  input: GFM  # GitHub-Flavored Markdown
+  syntax_highlighter_opts:
+    block:
+      line_numbers: false  # Disable built-in line numbers (using custom JS instead)
+
+theme: minima
+plugins:
+  - jekyll-feed
+  - jekyll-paginate  # Optional, improves navigation
+  - jekyll-sitemap   # Optional, better SEO
+
+# Ensure Jekyll processes the custom CSS
+include:
+  - assets/css
+  - _layouts
+
+# Review site specific settings
+show_drafts: true  # Show draft posts on review site
+future: true      # Show future-dated posts
