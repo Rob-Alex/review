@@ -23,20 +23,21 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Robbie’s Blog - Review Site | Review and staging environment for blog posts and features.</title>
+<title>Building A Compute Library | Robbie’s Blog - Review Site</title>
 <meta name="generator" content="Jekyll v3.9.5" />
-<meta property="og:title" content="Robbie’s Blog - Review Site" />
+<meta property="og:title" content="Building A Compute Library" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Review and staging environment for blog posts and features." />
 <meta property="og:description" content="Review and staging environment for blog posts and features." />
-<link rel="canonical" href="https://review.rob-blog.co.uk/404.html" />
-<meta property="og:url" content="https://review.rob-blog.co.uk/404.html" />
+<link rel="canonical" href="https://review.rob-blog.co.uk/2025/08/01/building-a-compute-library.html" />
+<meta property="og:url" content="https://review.rob-blog.co.uk/2025/08/01/building-a-compute-library.html" />
 <meta property="og:site_name" content="Robbie’s Blog - Review Site" />
-<meta property="og:type" content="website" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2025-08-01T00:00:00+01:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Robbie’s Blog - Review Site" />
+<meta property="twitter:title" content="Building A Compute Library" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","description":"Review and staging environment for blog posts and features.","headline":"Robbie’s Blog - Review Site","url":"https://review.rob-blog.co.uk/404.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-08-01T00:00:00+01:00","datePublished":"2025-08-01T00:00:00+01:00","description":"Review and staging environment for blog posts and features.","headline":"Building A Compute Library","mainEntityOfPage":{"@type":"WebPage","@id":"https://review.rob-blog.co.uk/2025/08/01/building-a-compute-library.html"},"url":"https://review.rob-blog.co.uk/2025/08/01/building-a-compute-library.html"}</script>
 <!-- End Jekyll SEO tag -->
 <!-- Load Minima Styles -->
   <link rel="stylesheet" href="/assets/main.css">
@@ -91,26 +92,113 @@
 
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
-        <style type="text/css" media="screen">
-  .container {
-    margin: 10px auto;
-    max-width: 600px;
-    text-align: center;
-  }
-  h1 {
-    margin: 30px 0;
-    font-size: 4em;
-    line-height: 1;
-    letter-spacing: -1px;
-  }
-</style>
+        <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
-<div class="container">
-  <h1>404</h1>
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Building A Compute Library</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2025-08-01T00:00:00+01:00" itemprop="datePublished">Aug 1, 2025
+      </time></p>
+  </header>
 
-  <p><strong>Page not found :(</strong></p>
-  <p>The requested page could not be found.</p>
+  <div class="post-content e-content" itemprop="articleBody">
+    
+<h1 id="introduction">Introduction</h1>
+
+<p>This project started during my PhD as I stumbled across the wonderful world of <a href="https://en.wikipedia.org/wiki/Computational_science">scientific computing</a>, where complex physics/maths problems are solved through numerical methods. There are many many aspects to this realm that focus on algorithms and hardware. In this first blog I am focusing on the backend development of my own compute library <code class="language-plaintext highlighter-rouge">tensor-cpp</code> that I will hopefully be able to use during my PhD to develop a <a href="https://en.wikipedia.org/wiki/Finite_volume_method">Finite volume method (FVM)</a> or <a href="https://en.wikipedia.org/wiki/Finite_element_method">Finite element method (FEM)</a> library to model the development of plasma channels for various pulsed power applications.</p>
+
+<p>There are a tonne of great libraries that are already used such as Eigen <a href="#citeproc_bib_item_1">[1]</a>, a fantastic linear algebra library that allows expression-template-based <a href="#citeproc_bib_item_2">[2]</a> work relating to matrices, vectors, etc.</p>
+
+<p>Again one of the interesting ideas I thought would be good to learn was how to properly work with GPUs for scientific computing as the original extent of my knowledge was f32 = bad, and f64 = good. So supporting heterogenous backends with GPU acceleration became one of the ever growing goals to this <code class="language-plaintext highlighter-rouge">tensor-cpp</code></p>
+
+<h1 id="designing-the-library">Designing the Library</h1>
+
+<p>I think the quote “First, solve the problem. Then, <del>write the code</del> implement the solution.” by John Johnson is a good philosphy to live by when developing any new engineering solutions be that in software or hardware worlds. Therefore the first steps were to properly define the scope of our project so we dont inccur <a href="https://en.wikipedia.org/wiki/Technical_debt">tech debt</a> or have massive <a href="https://en.wikipedia.org/wiki/Scope_creep">scope creep</a> along the development lifecycle.</p>
+
+<p>My main wants really stemmed from wanting to learn about scientific computing and HPC in more depth purely for understanding how more complex numerical methods are implemented in simulation software however I managed to define some motivations for the library that stemmed from practical needs of my own if I wanted to continue taking this further, these were:</p>
+
+<ul>
+  <li>
+    <p><strong>Backend-Agnostic Architecture</strong> - The library should be flexibile enough to target different hardware - be that CPU or GPU - without rewriting algorithms for each backend as that would be terribly tedious.</p>
+  </li>
+  <li>
+    <p><strong>Zero-Cost Abstractions</strong> - Honestly this wasn’t a goal at first but after reading about libraries like Eigen, the idead of having abstractions without additonal performance cost sounded great to learn about.</p>
+  </li>
+  <li>
+    <p><strong>Extensible</strong> - The architecture should clearly seperate the concerns of backend operations and computation logic to make it easier to develop the library further as well as for others to pick it up if they so desire.</p>
+  </li>
+  <li>
+    <p><strong>Performance Driven</strong> - High performance is required for large scale simulations and to ensure that these don’t go crazy throughout the lifetime of each simulation it is imperative that we can observe the API’s ability with benchmarking and performance analysis.</p>
+  </li>
+</ul>
+
+<h1 id="developing-an-agnostic-backend">Developing an Agnostic Backend</h1>
+
+<p>I am currently doing all my laptop work on the apple silicon M2 chip which has served me well, therefore the first backend I wanted to be able to support was the Metal API apple provides, to be able to take advantage of the GPU stack.</p>
+
+<p>As a jumping off point, there is a good article that walks through the basic process of using Metal from C++ by <a href="https://larsgeb.github.io/2022/04/20/m1-gpu.html">Lars Gebraad</a>. This highlights the necessary processes involved in compiling the metal shaders and linking against the necessary frameworks.</p>
+
+<p>Example of using a citation <a href="#citeproc_bib_item_3">[3]</a>. \( \frac{x^2}{x^3} \) is an example equation.
+<a href="#citeproc_bib_item_4">[4]</a></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>int main()
+{
+std::cout &lt;&lt; "Hello World"
+
+}
+</code></pre></div></div>
+
+<h1 id="implementing-the-compute-layer">Implementing the Compute Layer</h1>
+
+<p>Implementation</p>
+
+<h1 id="expression-templates-and-lazy-evaluation">Expression Templates and Lazy Evaluation</h1>
+
+<p>lets talk about expression templates</p>
+
+<h1 id="sending-dispatch-commands">Sending Dispatch Commands</h1>
+
+<p>lets talk about the dispatch commands</p>
+
+<h1 id="managing-memory-and-resources">Managing Memory and Resources</h1>
+
+<h1 id="raii-for-memory-safety-and-lifetime-management">RAII for Memory Safety and Lifetime Management</h1>
+
+<h1 id="unified-buffer-abstraction-for-cpu-and-gpu">Unified Buffer Abstraction for CPU and GPU</h1>
+
+<h1 id="memory-synchronisation">Memory Synchronisation</h1>
+
+<h1 id="performance-and-testing">Performance and Testing</h1>
+
+<h1 id="building-a-performance-measurement-framework">Building a Performance Measurement Framework</h1>
+
+<h1 id="stastical-analysis-and-benchmarking">Stastical Analysis and Benchmarking</h1>
+
+<h1 id="future-work">Future Work</h1>
+
+<h1 id="references">References</h1>
+
+<style>.csl-left-margin{float: left; padding-right: 0em;}
+ .csl-right-inline{margin: 0 0 0 1em;}</style>
+<div class="csl-bib-body">
+  <div class="csl-entry"><a id="citeproc_bib_item_1"></a>
+    <div class="csl-left-margin">[1]</div><div class="csl-right-inline">G. Guennebaud, B. Jacob, and others, “Eigen v3,” 2010, <i>http://eigen.tuxfamily.org</i>.</div>
+  </div>
+  <div class="csl-entry"><a id="citeproc_bib_item_2"></a>
+    <div class="csl-left-margin">[2]</div><div class="csl-right-inline">T. Veldhuizen, “Expression templates,” 1995, <i>https://www.cs.rpi.edu/ musser/design/blitz/exprtmpl.html</i>.</div>
+  </div>
+  <div class="csl-entry"><a id="citeproc_bib_item_3"></a>
+    <div class="csl-left-margin">[3]</div><div class="csl-right-inline">D. A. S. Rees, “An introduction to compact finite differences.” [Online]. Available: <a href="https://people.bath.ac.uk/ensdasr/COMPACT/dasr.compact.pdf">https://people.bath.ac.uk/ensdasr/COMPACT/dasr.compact.pdf</a></div>
+  </div>
+  <div class="csl-entry"><a id="citeproc_bib_item_4"></a>
+    <div class="csl-left-margin">[4]</div><div class="csl-right-inline">L. Gebraad, “M1 gpus for c++ science: Saxpy and finite differences.” [Online]. Available: <a href="https://larsgeb.github.io/2022/04/22/m1-gpu.html">https://larsgeb.github.io/2022/04/22/m1-gpu.html</a></div>
+  </div>
 </div>
+
+
+  </div><a class="u-url" href="/2025/08/01/building-a-compute-library.html" hidden></a>
+</article>
 
       </div>
     </main><footer class="site-footer h-card">
