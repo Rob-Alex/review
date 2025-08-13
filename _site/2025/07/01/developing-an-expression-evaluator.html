@@ -23,21 +23,21 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;450;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"><!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Testing Equation Numbering | Robbie’s Blog - Review Site</title>
+<title>Developing An Expression Evaluator | Robbie’s Blog - Review Site</title>
 <meta name="generator" content="Jekyll v3.9.5" />
-<meta property="og:title" content="Testing Equation Numbering" />
+<meta property="og:title" content="Developing An Expression Evaluator" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Testing KaTeX Equation Numbering" />
-<meta property="og:description" content="Testing KaTeX Equation Numbering" />
-<link rel="canonical" href="https://review.rob-blog.co.uk/testing/math/2025/01/21/testing-equation-numbering.html" />
-<meta property="og:url" content="https://review.rob-blog.co.uk/testing/math/2025/01/21/testing-equation-numbering.html" />
+<meta name="description" content="Review and staging environment for blog posts and features." />
+<meta property="og:description" content="Review and staging environment for blog posts and features." />
+<link rel="canonical" href="http://localhost:4000/2025/07/01/developing-an-expression-evaluator.html" />
+<meta property="og:url" content="http://localhost:4000/2025/07/01/developing-an-expression-evaluator.html" />
 <meta property="og:site_name" content="Robbie’s Blog - Review Site" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2025-01-21T00:00:00+00:00" />
+<meta property="article:published_time" content="2025-07-01T00:00:00+01:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Testing Equation Numbering" />
+<meta property="twitter:title" content="Developing An Expression Evaluator" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-01-21T00:00:00+00:00","datePublished":"2025-01-21T00:00:00+00:00","description":"Testing KaTeX Equation Numbering","headline":"Testing Equation Numbering","mainEntityOfPage":{"@type":"WebPage","@id":"https://review.rob-blog.co.uk/testing/math/2025/01/21/testing-equation-numbering.html"},"url":"https://review.rob-blog.co.uk/testing/math/2025/01/21/testing-equation-numbering.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2025-07-01T00:00:00+01:00","datePublished":"2025-07-01T00:00:00+01:00","description":"Review and staging environment for blog posts and features.","headline":"Developing An Expression Evaluator","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2025/07/01/developing-an-expression-evaluator.html"},"url":"http://localhost:4000/2025/07/01/developing-an-expression-evaluator.html"}</script>
 <!-- End Jekyll SEO tag -->
 <!-- Load Minima Styles -->
   <link rel="stylesheet" href="/assets/main.css">
@@ -66,7 +66,7 @@
       // Apply theme immediately to prevent flicker
       document.documentElement.setAttribute('data-theme', getCurrentTheme());
     })();
-  </script><link type="application/atom+xml" rel="alternate" href="https://review.rob-blog.co.uk/feed.xml" title="Robbie's Blog - Review Site" /></head>
+  </script><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="Robbie's Blog - Review Site" /></head>
 <body><header class="site-header" role="banner">
   <div class="wrapper"><a class="site-title" rel="author" href="/">Robbie&#39;s Blog - Review Site</a><nav class="site-nav">
         <input type="checkbox" id="nav-trigger" class="nav-trigger" />
@@ -96,83 +96,33 @@
 <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">Testing Equation Numbering</h1>
+    <h1 class="post-title p-name" itemprop="name headline">Developing An Expression Evaluator</h1>
     <p class="post-meta">
-      <time class="dt-published" datetime="2025-01-21T00:00:00+00:00" itemprop="datePublished">Jan 21, 2025
+      <time class="dt-published" datetime="2025-07-01T00:00:00+01:00" itemprop="datePublished">Jul 1, 2025
       </time></p>
   </header>
 
   <div class="post-content e-content" itemprop="articleBody">
-    <h1 id="testing-katex-equation-numbering">Testing KaTeX Equation Numbering</h1>
+    
+<h1 id="introduction">Introduction</h1>
 
-<p>This post demonstrates the new equation numbering system that works seamlessly with your org-mode workflow.</p>
+<p>One of the interesting things</p>
 
-<h2 id="basic-display-equations">Basic Display Equations</h2>
+<h1 id="tokeniser">Tokeniser</h1>
 
-<p>Here’s a simple display equation using <code class="language-plaintext highlighter-rouge">\[ \]</code> syntax (auto-numbered):</p>
+<h1 id="parsing">Parsing</h1>
 
-<p>[
-E = mc^2
-]</p>
+<h1 id="evaluation">Evaluation</h1>
 
-<p>And another one using equation environment:</p>
+<h1 id="references">References</h1>
 
-<p>\begin{equation}
-F = ma
-\end{equation}</p>
+<style>.csl-left-margin{float: left; padding-right: 0em;}
+ .csl-right-inline{margin: 0 0 0 0em;}</style>
+<div class="csl-bib-body">
+</div>
 
-<h2 id="labeled-equations">Labeled Equations</h2>
 
-<p>You can add labels in your org-mode files for cross-referencing:</p>
-
-<p>\begin{equation}\label{maxwell}
-\nabla \times \mathbf{E} = -\frac{\partial \mathbf{B}}{\partial t}
-\end{equation}</p>
-
-<p>\begin{equation}\label{continuity}
-\frac{\partial \rho}{\partial t} + \nabla \cdot \mathbf{j} = 0
-\end{equation}</p>
-
-<h2 id="cross-references">Cross-References</h2>
-
-<p>Now you can reference equations in your text! For example:</p>
-
-<ul>
-  <li>Maxwell’s equation \eqref{maxwell} describes electromagnetic induction</li>
-  <li>The continuity equation \eqref{continuity} expresses charge conservation</li>
-  <li>Einstein’s mass-energy relation was shown in equation (1)</li>
-</ul>
-
-<h2 id="inline-math-unchanged">Inline Math (Unchanged)</h2>
-
-<p>Your inline math continues to work exactly as before: ( \alpha = \frac{\beta}{\gamma} ) and ( x^2 + y^2 = z^2 ).</p>
-
-<h2 id="complex-equations">Complex Equations</h2>
-
-<p>The numbering works with complex multi-line equations too:</p>
-
-<p>\begin{align}
-\nabla \times \mathbf{E} &amp;= -\frac{\partial \mathbf{B}}{\partial t} <br />
-\nabla \times \mathbf{B} &amp;= \mu_0\mathbf{j} + \mu_0\epsilon_0\frac{\partial \mathbf{E}}{\partial t} <br />
-\nabla \cdot \mathbf{E} &amp;= \frac{\rho}{\epsilon_0} <br />
-\nabla \cdot \mathbf{B} &amp;= 0
-\end{align}</p>
-
-<h2 id="your-workflow-remains-the-same">Your Workflow Remains the Same</h2>
-
-<p>In your org-mode files, you just write:</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>\begin{equation}\label{newton}
-F = ma
-\end{equation}
-</code></pre></div></div>
-
-<p>Then reference with: <code class="language-plaintext highlighter-rouge">As shown in \eqref{newton}...</code></p>
-
-<p>The system automatically handles the numbering and creates clickable links!</p>
-
-<p>The export process handles everything automatically!</p>
-
-  </div><a class="u-url" href="/testing/math/2025/01/21/testing-equation-numbering.html" hidden></a>
+  </div><a class="u-url" href="/2025/07/01/developing-an-expression-evaluator.html" hidden></a>
 </article>
 
       </div>
